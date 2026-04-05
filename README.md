@@ -12,7 +12,7 @@ The world is modeled as a three-level hierarchy: **Planets → Countries → Cit
 
 | Architecture | Strategy |
 |---|---|
-| **baseline** | Full world serialized as flat text, truncated to 120,000 chars |
+| **baseline** | Full world serialized as flat text |
 | **hgrag**    | Hierarchy-aware subgraph: anchor node + k_up=2 ancestors + k_side=1 lateral neighbors |
 
 HG-RAG uses an LLM to extract the anchor entity from each query, walks up the containment hierarchy, and collects relevant lateral neighbors, prioritizing adversarial neighbors (hostile/unfriendly) so they are never dropped by the neighbor cap.

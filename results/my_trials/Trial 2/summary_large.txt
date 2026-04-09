@@ -1,0 +1,82 @@
+============================================================
+OVERALL RESULTS (mean per system)
+============================================================
+          factual_accuracy  hallucination_rate  locality_awareness
+system                                                            
+baseline             0.022               0.009               0.942
+hgrag                1.848               0.013               1.000
+
+============================================================
+RESULTS BY QUERY TYPE
+============================================================
+                       factual_accuracy  hallucination_rate  locality_awareness
+query_type   system                                                            
+hierarchical baseline              0.00               0.000               1.000
+             hgrag                 2.00               0.000               1.000
+local_fact   baseline              0.00               0.000               1.000
+             hgrag                 2.00               0.042               1.000
+multi_hop    baseline              0.10               0.039               0.734
+             hgrag                 1.60               0.008               1.000
+neighborhood baseline              0.00               0.000               1.000
+             hgrag                 1.75               0.000               1.000
+
+============================================================
+MULTI-HOP LLM JUDGE SCORE (mean per system, scale 1-5)
+============================================================
+system
+baseline    1.6
+hgrag       4.4
+
+============================================================
+MULTI-HOP QUESTION DETAILS
+============================================================
+
+[Q1 | large] Strevon has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Korith. Strevon has a hostile relationship with Korith, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any declaration of war by Strevon.
+  HGRAG     (judge: 5): Strevon may have declared war on Korith, as the relation between them is listed as hostile in the context provided.
+
+[Q15 | large] Trevak has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Braxis, Feroth, Qundis. Trevak has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any country named 'Trevak'.
+  HGRAG     (judge: 5): Trevak is hostile towards Qundis, Feroth, and Braxis in the context provided. However, since Trevak is neutral with Morthal and Lyssen, and has no trade relations with Sundar, it's most likely that Trevak has declared war on either Qundis, Feroth, or Braxis due to their hostile relationship status.
+
+[Q17 | large] Crestwatch is experiencing a labor strike that halts the export of chemicals and technology. Which cities are affected by this and why?
+  Answer Key : The cities affected are Yorkdale. They rely on Crestwatch for imported goods: Yorkdale (imports chemicals from Crestwatch). The labor strike halting exports of chemicals and technology directly disrupts their supply.
+  BASELINE  (judge: 1): The labor strike in Crestwatch affects Keldwatch, Umbrefell, Holtholm, Holtstead, Bluehaven, and Umbrehaven. These cities are affected because they all export or import chemicals, which production or supply is disrupted due to the strike in Crestwatch. Additionally, Holtholm, Holtstead, and Bluehaven also export technology, which may be impacted if Crestwatch is a significant supplier of this commodity.
+  HGRAG     (judge: 5): Ferndale and Yorkdale are affected by the labor strike in Crestwatch, as they import chemicals and technology from Crestwatch respectively.
+
+[Q24 | large] Ormis has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Archus. Ormis has a hostile relationship with Archus, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any declaration of war by Ormis.
+  HGRAG     (judge: 5): Ormis may declare war on Archus, as their relationship is hostile according to the provided context.
+
+[Q27 | large] Nordton is experiencing a labor strike that halts the export of silk and gems. Which cities are affected by this and why?
+  Answer Key : The cities affected are Edgewood. They rely on Nordton for imported goods: Edgewood (imports gems from Nordton). The labor strike halting exports of silk and gems directly disrupts their supply.
+  BASELINE  (judge: 1): The cities affected by the labor strike in Nordton, which halts the export of silk and gems, are Bellkeep, Xenmark, Pinecove, Xarford, Portbay, Rockholm, Umbremere, and Zealpeak. These cities are affected because they either export or import silk and/or gems with Nordton.
+  HGRAG     (judge: 5): The labor strike in Nordton affects Edgewood, as Nordton trades with Edgewood and the halted exports include silk and gems, which are among the goods traded between these two cities.
+
+[Q30 | large] Zorport has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Ironkeep. They supply goods to Zorport: Ironkeep (exports spices to Zorport). With Zorport halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Thornstead, Westbay, and Darkstrand would take an economic hit from Zorport halting imports as they import pharmaceuticals, grain, and none respectively.
+  HGRAG     (judge: 3): Zealbay, Stormgate, and Ironkeep would take an economic hit from Zorport's decision to halt imports since they export spices (to Zorport) and have no other listed import partners in the context.
+
+[Q31 | large] Espar has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Halvor, Lomber. Espar has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 5): Espar is hostile to Lomber, based on the context provided.
+  HGRAG     (judge: 5): Halvor is a neighboring country of Espar and they are in a hostile relationship, which could potentially lead to a declaration of war.
+
+[Q36 | large] Nalden has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Korith, Pelcor. Nalden has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any country named 'Nalden'.
+  HGRAG     (judge: 5): Korith is a neighboring country of Nalden that has been declared as hostile, so they may be the one Nalden has declared war on. This is based on the provided context showing their hostile relationship.
+
+[Q42 | large] Firehaven has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Grimmere. They supply goods to Firehaven: Grimmere (exports spices to Firehaven). With Firehaven halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 3): Cities that trade with Firehaven and import goods from it are likely to experience an economic hit due to the halt in imports. These include Thornstead, Lakeport, Thornhold, Zorspire, Westbay, Sandton, Quenmoor, Duskmere, Holtwood, Glenpeak, Wrenholm, Keldcove, Lochhaven, Glengrove, and possibly others not listed in the context. However, it's important to note that the exact impact would depend on the relative importance of Firehaven as a trading partner for each city.
+  HGRAG     (judge: 3): Coldford, Zealton, and Grimmere would take an economic hit from Firehaven's decision to halt imports since they trade goods with Firehaven.
+
+[Q43 | large] Braxis has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Trevak. Braxis has a hostile relationship with Trevak, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any country named Braxis or any declaration of war.
+  HGRAG     (judge: 3): Feroth is the neighboring country that Braxis has declared war on, as they are listed as neutral in trade relations but labeled as 'hostile' in the context provided.

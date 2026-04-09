@@ -24,10 +24,11 @@ from retrieval import (
     resolve_entity,
     retrieve_subgraph,
     serialize_context,
-    serialize_flat_world,
     extract_anchor,
+    build_rag_index,
+    retrieve_rag_chunks,
 )
-from llm import query_llm, build_hgrag_prompt, build_baseline_prompt, build_judge_prompt
+from llm import query_llm, build_hgrag_prompt, build_rag_prompt, build_judge_prompt, EMBED_MODEL
 
 # Max chars given to the baseline (removed)
 MAX_FLAT_CHARS = None
@@ -156,12 +157,18 @@ def score_llm_judge(query: str, answer_key: str, response: str, model: str) -> t
 
 # Experiment runner                                                   
 
-def run_experiment(G, queries, model="qwen2.5:7b", verbose=True):
+def run_experiment(G, queries, model="qwen2.5:7b", embed_model=EMBED_MODEL, verbose=True):
     """
     Run both systems (baseline + HG-RAG) on all queries.
-    Returns a pandas DataFrame with one row per (query, system)
+    baseline: per-node chunks embedded with embed_model, top-10 retrieved by cosine similarity.
+    hgrag:      k-hop subgraph around the anchor node, serialized as structured text.
+    Returns a pandas DataFrame with one row per (query, system).
     """
-    flat_context = serialize_flat_world(G, max_chars=MAX_FLAT_CHARS)
+    if verbose:
+        print("Building vector RAG index...", end=" ", flush=True)
+    rag_index = build_rag_index(G, embed_model=embed_model)
+    if verbose:
+        print(f"done — {len(rag_index)} chunks indexed")
     records = []
 
     for i, q in enumerate(queries):
@@ -204,13 +211,14 @@ def run_experiment(G, queries, model="qwen2.5:7b", verbose=True):
             if verbose:
                 print(f"    WARNING: NLP extraction failed — '{q['query'][:50]}'")
 
-        # Baseline
-        prompt_a, sys_a = build_baseline_prompt(flat_context, q["query"])
+        # Simple RAG baseline: retrieve top-10 chunks by cosine similarity
+        rag_context = retrieve_rag_chunks(q["query"], rag_index, embed_model=embed_model)
+        prompt_a, sys_a = build_rag_prompt(rag_context, q["query"])
         answer_a = query_llm(prompt_a, model=model, system=sys_a, max_tokens=max_tok)
 
         systems = [
-            ("baseline", answer_a, anchor,              flat_context),
-            ("hgrag",    answer_b, nlp_anchor or anchor, hg_context or flat_context),
+            ("baseline",   answer_a, anchor,              rag_context),
+            ("hgrag",      answer_b, nlp_anchor or anchor, hg_context),
         ]
 
         for system, answer, sys_anchor, sys_context in systems:
@@ -274,9 +282,16 @@ def _build_summary_text(df: pd.DataFrame) -> str:
         lines.append("\n" + "=" * 60)
         lines.append("MULTI-HOP QUESTION DETAILS")
         lines.append("=" * 60)
-        for qid, group in mh.groupby("query_id", sort=True):
+        has_size = "world_size" in df.columns
+        group_keys = ["world_size", "query_id"] if has_size else ["query_id"]
+        for keys, group in mh.groupby(group_keys, sort=True):
             row = group.iloc[0]
-            lines.append(f"\n[Q{int(qid)+1}] {row['query']}")
+            if has_size:
+                world_size, qid = keys
+                lines.append(f"\n[Q{int(qid)+1} | {world_size}] {row['query']}")
+            else:
+                qid = keys
+                lines.append(f"\n[Q{int(qid)+1}] {row['query']}")
             lines.append(f"  Answer Key : {row['answer_key']}")
             for _, r in group.iterrows():
                 score_str = f"  (judge: {int(r['llm_judge_score'])})" if pd.notna(r["llm_judge_score"]) else ""

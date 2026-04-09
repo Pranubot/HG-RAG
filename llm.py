@@ -8,8 +8,10 @@ task or too large for the average enthusiast to download.
 
 import requests
 
-OLLAMA_URL = "http://127.0.0.1:11434/api/chat"
+OLLAMA_URL   = "http://127.0.0.1:11434/api/chat"
+EMBED_URL    = "http://127.0.0.1:11434/api/embeddings"
 DEFAULT_MODEL = "mistral:latest"
+EMBED_MODEL   = "nomic-embed-text"  # pull with: ollama pull nomic-embed-text
 
 
 def query_llm(prompt, model=DEFAULT_MODEL, system=None, max_tokens=400):
@@ -38,6 +40,21 @@ def query_llm(prompt, model=DEFAULT_MODEL, system=None, max_tokens=400):
         return "[LLM ERROR: Ollama not running. Start with: ollama serve]"
     except Exception as e:
         return f"[LLM ERROR: {e}]"
+
+
+def get_embedding(text: str, model: str = EMBED_MODEL) -> list:
+    try:
+        resp = requests.post(
+            EMBED_URL,
+            json={"model": model, "prompt": text},
+            timeout=60,
+            proxies={"http": None, "https": None},
+        )
+        if resp.status_code != 200:
+            return []
+        return resp.json().get("embedding", [])
+    except Exception:
+        return []
 
 
 def check_ollama():
@@ -79,6 +96,20 @@ def build_hgrag_prompt(context, query):
 def build_baseline_prompt(context, query):
     prompt = f"World Information:\n{context}\n\nQuestion: {query}\n\nAnswer:"
     return prompt, BASELINE_SYSTEM
+
+
+SIMPLE_RAG_SYSTEM = (
+    "You are a world knowledge assistant. "
+    "Answer questions using ONLY the retrieved context passages provided. "
+    "Do not add any information not present in the context. "
+    "If the answer is not in the context, say 'Not found in context.' "
+    "Be concise: 1-2 sentences for simple facts, up to 3-4 sentences when naming multiple entities or explaining a causal chain."
+)
+
+
+def build_rag_prompt(context: str, query: str):
+    prompt = f"Retrieved Context:\n{context}\n\nQuestion: {query}\n\nAnswer:"
+    return prompt, SIMPLE_RAG_SYSTEM
 
 """
 Pranu's note: Judging Multi-Hop questions were a unique challenge, large part due to them being open-ended questions. Not only did I want

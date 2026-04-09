@@ -1,0 +1,202 @@
+============================================================
+OVERALL RESULTS (mean per system)
+============================================================
+          factual_accuracy  hallucination_rate  locality_awareness
+system                                                            
+baseline             0.430               0.014               0.952
+hgrag                1.775               0.024               1.000
+
+============================================================
+RESULTS BY QUERY TYPE
+============================================================
+                       factual_accuracy  hallucination_rate  locality_awareness
+query_type   system                                                            
+hierarchical baseline             0.167               0.000               1.000
+             hgrag                2.000               0.000               1.000
+local_fact   baseline             0.333               0.007               1.000
+             hgrag                2.000               0.069               1.000
+multi_hop    baseline             0.647               0.052               0.799
+             hgrag                1.353               0.028               1.000
+neighborhood baseline             0.583               0.000               1.000
+             hgrag                1.722               0.000               1.000
+
+============================================================
+MULTI-HOP LLM JUDGE SCORE (mean per system, scale 1-5)
+============================================================
+system
+baseline    2.824
+hgrag       3.853
+
+============================================================
+MULTI-HOP QUESTION DETAILS
+============================================================
+
+[Q1 | large] Strevon has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Korith. Strevon has a hostile relationship with Korith, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any declaration of war by Strevon.
+  HGRAG     (judge: 5): Strevon may have declared war on Korith, as they are listed as having hostile relations in the context provided.
+
+[Q15 | large] Trevak has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Braxis, Feroth, Qundis. Trevak has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any country named 'Trevak'.
+  HGRAG     (judge: 3): Trevak is hostile towards Feroth, Braxis, and Qundis in the context provided. However, since Trevak is neutral with Morthal and Lyssen, it's not possible to definitively determine which neighboring country Trevak has declared war on based solely on the given information.
+
+[Q17 | large] Crestwatch is experiencing a labor strike that halts the export of chemicals and technology. Which cities are affected by this and why?
+  Answer Key : The cities affected are Yorkdale. They rely on Crestwatch for imported goods: Yorkdale (imports chemicals from Crestwatch). The labor strike halting exports of chemicals and technology directly disrupts their supply.
+  BASELINE  (judge: 1): The cities affected by the labor strike in Crestwatch are Keldwatch, Umbrefell, Holtholm, Holtstead, Bluehaven, and Umbrehaven. This is because all these cities export chemicals, which are not being exported due to the strike in Crestwatch. Additionally, Holtholm exports technology, which also might be affected if Crestwatch's strike disrupts their supply chain.
+  HGRAG     (judge: 5): Yorkdale is affected by the labor strike in Crestwatch because they trade with Crestwatch and import chemicals, which are now halted due to the strike.
+
+[Q24 | large] Ormis has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Archus. Ormis has a hostile relationship with Archus, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any declaration of war by Ormis.
+  HGRAG     (judge: 2): Ormis is neutral with all other countries mentioned in the context, so it has not declared war on any neighboring country according to the provided information.
+
+[Q27 | large] Nordton is experiencing a labor strike that halts the export of silk and gems. Which cities are affected by this and why?
+  Answer Key : The cities affected are Edgewood. They rely on Nordton for imported goods: Edgewood (imports gems from Nordton). The labor strike halting exports of silk and gems directly disrupts their supply.
+  BASELINE  (judge: 1): The cities affected by the labor strike in Nordton are Bellkeep, Xenmark, Pinecove, Xarford, Rockholm, and Portbay. These cities are affected because they import silk from Nordton and/or gems, which are now halted due to the strike.
+  HGRAG     (judge: 5): Edgewood is affected by the labor strike in Nordton because they trade with Nordton, and Nordton exports silk and gems to Edgewood.
+
+[Q30 | large] Zorport has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Ironkeep. They supply goods to Zorport: Ironkeep (exports spices to Zorport). With Zorport halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that trade with Zorport such as Lakeport, Thornhold, Sandton, Glengrove, and Lochhaven would take an economic hit from Zorport halting imports.
+  HGRAG     (judge: 5): Ironkeep, due to the trade_with relation between Zorport and Ironkeep.
+
+[Q31 | large] Espar has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Halvor, Lomber. Espar has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 5): Espar is hostile to Lomber, based on the context provided.
+  HGRAG     (judge: 5): Halvor is a neighboring country of Espar and they are in a hostile relationship, which could potentially lead to war.
+
+[Q36 | large] Nalden has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Korith, Pelcor. Nalden has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any country named 'Nalden'.
+  HGRAG     (judge: 5): Nalden may have declared war on Korith, as their relationship is listed as hostile in the context.
+
+[Q42 | large] Firehaven has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Grimmere. They supply goods to Firehaven: Grimmere (exports spices to Firehaven). With Firehaven halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 3): Cities that trade with Firehaven and import goods from it are likely to experience an economic hit due to the halt in imports. These include Thornstead, Lakeport, Thornhold, Zorspire, Westbay, Sandton, Darkstrand, Edgestead, Glengrove, Lochhaven, and possibly Veldvale (if it imports goods from Firehaven). However, the exact impact would depend on the volume of trade between each city and Firehaven.
+  HGRAG     (judge: 5): Grimmere, as it trades with Firehaven for medicine and spices.
+
+[Q43 | large] Braxis has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Trevak. Braxis has a hostile relationship with Trevak, making military escalation the expected outcome.
+  BASELINE  (judge: 1): Not found in context. The provided context does not mention any country named Braxis.
+  HGRAG     (judge: 2): Feroth is a neighboring country of Braxis that is in a state of neutral relations, but Braxis has declared war on Feroth because it is listed as hostile in the context provided.
+
+[Q4 | medium] Rockgrove is experiencing a labor strike that halts the export of coal and grain. Which cities are affected by this and why?
+  Answer Key : The cities affected are Kraymere, Zealcross, Firemark. They rely on Rockgrove for imported goods: Kraymere (imports grain from Rockgrove); Zealcross (imports coal from Rockgrove); Firemark (imports grain from Rockgrove). The labor strike halting exports of coal and grain directly disrupts their supply.
+  BASELINE  (judge: 5): Rockgrove exports coal and grain to Zealcross, Rockgrove, and Firemark. If Rockgrove's labor strike halts the export of these goods, then those cities will be affected because they import coal and/or grain from Rockgrove.
+  HGRAG     (judge: 4): The cities affected by the labor strike in Rockgrove are Zealcross, Firemark, and potentially Pinevale (if they import grain from Rockgrove). This is because Rockgrove trades coal with both Zealcross and Firemark, and it exports grain to Zealcross, Pinevale, and possibly imports grain as well.
+
+[Q15 | medium] Moormark has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Coldmark, Glenridge. They supply goods to Moormark: Coldmark (exports machinery to Moormark); Glenridge (exports pharmaceuticals to Moormark). With Moormark halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Moormark halting imports are Nethholm, Veldvale, Pinefell, Crestridge, Highgate, Edgeport, Quenpeak, Oakgate, and Thornridge as they all trade with Moormark.
+  HGRAG     (judge: 3): Coldmark, Glenridge, and Amberhold would take an economic hit from Moormark halting its imports since they trade with Moormark. Lochspire might also be affected indirectly due to the border connection with Moormark and Lochspire trading with Coldmark. However, Zealholm is not directly impacted as it only borders Moormark but does not trade with it. Jademere is not affected since it doesn't import any goods or trade with Moormark.
+
+[Q16 | medium] Morthal has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Braxis, Qundis. Morthal has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 5): Morthal is hostile to Braxis, as stated in the context. This hostility might have led to a declaration of war.
+  HGRAG     (judge: 5): Morthal is hostile towards Braxis, as indicated by the 'trade_with' relation in the context. However, since there are no direct trade relations between Morthal and other countries, it can be inferred that Braxis is the neighboring country Morthal has declared war on.
+
+[Q17 | medium] Islestrand is experiencing a labor strike that halts the export of fuel and electronics. Which cities are affected by this and why?
+  Answer Key : The cities affected are Nordkeep. They rely on Islestrand for imported goods: Nordkeep (imports fuel from Islestrand). The labor strike halting exports of fuel and electronics directly disrupts their supply.
+  BASELINE  (judge: 5): The labor strike in Islestrand affects cities that trade with it, such as Zealkeep (due to the halted export of fuel) and Nordkeep (due to the halted export of both fuel and electronics).
+  HGRAG     (judge: 3): Zealkeep, Keldmere, and Onyxwood are affected by the labor strike in Islestrand because they import fuel and electronics from it.
+
+[Q21 | medium] Valecross is experiencing a labor strike that halts the export of machinery and oil. Which cities are affected by this and why?
+  Answer Key : The cities affected are Colddale. They rely on Valecross for imported goods: Colddale (imports oil from Valecross). The labor strike halting exports of machinery and oil directly disrupts their supply.
+  BASELINE  (judge: 3): Cities affected by the labor strike in Valecross are Lochspire, as it trades with Valecross, and Thornridge, as it also trades with both Valecross and Lochspire. The halt in machinery exports from Valecross will impact Lochspire's machinery imports, and the halt in oil exports from Valecross will affect Thornridge's oil imports.
+  HGRAG     (judge: 4): The labor strike in Valecross affects cities connected through trade relations, namely Colddale (imports machinery) and potentially Thornbay (imports machinery or oil). However, without additional context about specific trade volumes or dependencies, it's impossible to definitively determine which city will be more affected.
+
+[Q22 | medium] Ormis has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Sundar. Ormis has a unfriendly relationship with Sundar, making military escalation the expected outcome.
+  BASELINE  (judge: 5): Ormis is hostile to both Sundar and Trevak, as stated in the context. However, it has friendly relations with Venthai, so it's more likely that Ormis might have declared war on Sundar due to their hostility towards each other, as mentioned in the provided context.
+  HGRAG     (judge: 5): Sundar, as Ormis is unfriendly with Sundar according to the provided context.
+
+[Q24 | medium] Duskwatch has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Lakefield, Ambervale. They supply goods to Duskwatch: Lakefield (exports fish to Duskwatch); Ambervale (exports oil to Duskwatch). With Duskwatch halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Edgeport, as it trades with Duskwatch and imports pottery from there.
+  HGRAG     (judge: 2): Isledale, Marshcross, and Ambervale would take an economic hit from Duskwatch's decision to halt imports, as they trade with Duskwatch. Lakefield might also be affected indirectly due to their trade relationship with Duskwatch.
+
+[Q30 | medium] Valepeak is experiencing a labor strike that halts the export of spices and pharmaceuticals. Which cities are affected by this and why?
+  Answer Key : The cities affected are Fernton. They rely on Valepeak for imported goods: Fernton (imports spices from Valepeak). The labor strike halting exports of spices and pharmaceuticals directly disrupts their supply.
+  BASELINE  (judge: 2): The cities affected by the labor strike in Valepeak are Ferngate, as it exports spices, and Zealspire, Ashhaven, and Grimport, as they import spices. This is due to the halt in the export of spices from Valepeak.
+  HGRAG     (judge: 5): The labor strike in Valepeak affects Fernwatch and Ironhold, as both cities import spices and pharmaceuticals from Valepeak.
+
+[Q34 | medium] Sundar has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Venthai, Pelcor, Trevak. Sundar has a hostile relationship with them, making military escalation the expected outcome.
+  BASELINE  (judge: 3): Sundar is hostile to Trevak, as stated in the context. This hostility might have led Sundar to declare war on Trevak.
+  HGRAG     (judge: 5): Sundar is hostile towards Venthai, so Venthai may be the neighboring country that Sundar has declared war on, due to the provided relations in the context.
+
+[Q39 | medium] Ironbay has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Edgemere. They supply goods to Ironbay: Edgemere (exports electronics to Ironbay). With Ironbay halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Ironbay halting imports are Veldvale (imports gems, textiles), Pinefell (imports grain), Crestridge (imports textiles, pottery), Highgate (imports pottery), Edgeport (imports pottery), Quenpeak (imports timber), Oakgate (imports textiles), Thornridge (imports machinery).
+  HGRAG     (judge: 5): Fernkeep and Edgemere would take an economic hit from Ironbay's decision to halt imports, as both cities trade with Ironbay.
+
+[Q43 | medium] Edgemere has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Fernkeep, Stormridge. They supply goods to Edgemere: Fernkeep (exports silk to Edgemere); Stormridge (exports livestock to Edgemere). With Edgemere halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Edgemere halting imports are Pinefell (due to its exports of textiles and silk), Crestridge (exports textiles and electronics), Veldvale (exports pottery), Valedale (exports pottery), Nethholm (imports textiles), and Quenpeak (imports timber).
+  HGRAG     (judge: 3): Stormridge, Bluedale, Ferngrove, Fernkeep, and Xarmoor would take an economic hit from Edgemere's decision to halt imports, as they are all cities that trade with Edgemere.
+
+[Q47 | medium] Oakbridge is experiencing a labor strike that halts the export of coal and grain. Which cities are affected by this and why?
+  Answer Key : The cities affected are Fernkeep. They rely on Oakbridge for imported goods: Fernkeep (imports coal from Oakbridge). The labor strike halting exports of coal and grain directly disrupts their supply.
+  BASELINE  (judge: 5): Oakbridge's labor strike affects cities that import coal and/or grain from Oakbridge, such as Grimburg, Colddale, Xenhold, Ironbay, Zealcross, and Rockgrove. These cities are affected because they rely on Oakbridge for their coal and grain imports.
+  HGRAG     (judge: 5): Colddale, Ironbay, and Fernkeep are affected by the labor strike in Oakbridge as they import coal and grain from Oakbridge.
+
+[Q1 | small] Yoremoor has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Lochridge, Onyxhaven. They supply goods to Yoremoor: Lochridge (exports grain to Yoremoor); Onyxhaven (exports silk to Yoremoor). With Yoremoor halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 2): Yorewood, Onyxhaven, and Eastspire would take an economic hit from Yoremoor halting its imports since they trade with Yoremoor according to the provided context.
+  HGRAG     (judge: 1): Zealkeep, Jadewick, Onyxwood, Lochmoor, and Eastspire would take an economic hit from Yoremoor's decision to halt imports. These cities trade with Yoremoor and import goods such as technology, silk, grain, and fuel from it.
+
+[Q2 | small] Veldkeep has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Yorkridge, Veldhaven. They supply goods to Veldkeep: Yorkridge (exports oil to Veldkeep); Veldhaven (exports fuel to Veldkeep). With Veldkeep halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Veldkeep halting its imports are Nethholm, Oakcliff, Umbreholm, and Yorewood as they all have trade relations with Veldkeep according to the provided context.
+  HGRAG     (judge: 3): Umbreholm, Yorkridge, and Veldhaven would take an economic hit from Veldkeep's decision to halt imports since they trade with Veldkeep. Additionally, Oakcliff might also be affected indirectly due to its trade relationship with Yorewood, which borders Umbreholm and trades with Veldkeep.
+
+[Q13 | small] Yoremoor is experiencing a labor strike that halts the export of technology and fuel. Which cities are affected by this and why?
+  Answer Key : The cities affected are Lochmoor, Lochridge, Onyxhaven, Zealkeep, Eastspire. They rely on Yoremoor for imported goods: Lochmoor (imports fuel from Yoremoor); Lochridge (imports fuel from Yoremoor); Onyxhaven (imports technology from Yoremoor); Zealkeep (imports fuel from Yoremoor); Eastspire (imports fuel from Yoremoor). The labor strike halting exports of technology and fuel directly disrupts their supply.
+  BASELINE  (judge: 5): The labor strike in Yoremoor affects Zealkeep, Lochridge, and potentially Onyxhaven, as all three cities import technology and/or fuel from Yoremoor.
+  HGRAG     (judge: 5): Zealkeep, Onyxhaven, Lochridge, and Eastspire are affected by the labor strike in Yoremoor because they trade with Yoremoor for technology and fuel exports.
+
+[Q16 | small] Jadewick has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Pinecove, Eastspire. They supply goods to Jadewick: Pinecove (exports textiles, oil to Jadewick); Eastspire (exports oil to Jadewick). With Jadewick halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 5): Pinecove, Onyxwood, and Eastspire would take an economic hit from Jadewick's temporary halt on imports since they trade with it.
+  HGRAG     (judge: 5): Pinecove and Eastspire, as they trade with Jadewick.
+
+[Q20 | small] Lochfield is experiencing a labor strike that halts the export of oil and livestock. Which cities are affected by this and why?
+  Answer Key : The cities affected are Yorewood. They rely on Lochfield for imported goods: Yorewood (imports oil from Lochfield). The labor strike halting exports of oil and livestock directly disrupts their supply.
+  BASELINE  (judge: 4): The cities affected by the labor strike in Lochfield are Yorkridge, Veldhaven, and possibly Yorewood, as all three trade with Lochfield and import oil and/or livestock from it.
+  HGRAG     (judge: 3): Yorkridge, Oakridge, and potentially Veldhaven are affected by the labor strike in Lochfield as they trade with Lochfield for oil and livestock.
+
+[Q32 | small] Venthai has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Strevon. Venthai has a hostile relationship with Strevon, making military escalation the expected outcome.
+  BASELINE  (judge: 5): Venthai is hostile towards Strevon, as stated in the context.
+  HGRAG     (judge: 5): The country that Venthai is hostile towards, according to the context, is Strevon. This is because in the provided relations, it is stated that Strevon <-> Venthai (hostile).
+
+[Q34 | small] Umbreholm has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Nethholm, Veldkeep. They supply goods to Umbreholm: Nethholm (exports grain to Umbreholm); Veldkeep (exports chemicals to Umbreholm). With Umbreholm halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 5): Nethholm, Veldkeep, and Oakcliff would take an economic hit from Umbreholm halting its imports since they trade with Umbreholm according to the provided context.
+  HGRAG     (judge: 1): Yorkridge, Oakridge, and Nethholm would take an economic hit from Umbreholm's decision to halt imports, as they trade with Umbreholm.
+
+[Q35 | small] Onyxwood has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Eastspire, Onyxhaven. They supply goods to Onyxwood: Eastspire (exports fish to Onyxwood); Onyxhaven (exports silk to Onyxwood). With Onyxwood halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Onyxwood halting its imports are Yorewood, Umbreholm, Veldkeep, and Yorkridge as they all trade with Onyxwood according to the provided context.
+  HGRAG     (judge: 1): Jadewick, Onyxhaven, and Eastspire would take an economic hit from Onyxwood's decision to halt imports.
+
+[Q36 | small] Yorkridge has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Veldkeep, Nethholm. They supply goods to Yorkridge: Veldkeep (exports chemicals to Yorkridge); Nethholm (exports grain to Yorkridge). With Yorkridge halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 3): Nethholm, Oakcliff, Veldkeep, and Umbreholm would take an economic hit from Yorkridge's decision to halt imports.
+  HGRAG     (judge: 1): Umbreholm, Yorewood, Lochfield, and Oakridge would take an economic hit from Yorkridge's decision to halt imports. These cities trade with Yorkridge and import goods such as grain, chemicals, textiles, fish, and oil from it.
+
+[Q41 | small] Yorewood is experiencing a labor strike that halts the export of textiles and machinery. Which cities are affected by this and why?
+  Answer Key : The cities affected are Lochfield, Oakcliff, Oakridge. They rely on Yorewood for imported goods: Lochfield (imports textiles from Yorewood); Oakcliff (imports textiles from Yorewood); Oakridge (imports textiles from Yorewood). The labor strike halting exports of textiles and machinery directly disrupts their supply.
+  BASELINE  (judge: 3): The labor strike in Yorewood affects cities that import textiles or have trade relations with Yorewood, which include Oakcliff (imports textiles), Onyxhaven (trade_with Yorewood), and possibly Veldkeep (trade_with Yorewood) and Yoremoor (trade_with Yorewood). The reason is that the strike halts the export of textiles from Yorewood.
+  HGRAG     (judge: 5): The labor strike in Yorewood affects Umbreholm, Yorkridge, and Lochfield because they trade with Yorewood and import textiles and machinery from it.
+
+[Q43 | small] Yorkridge is experiencing a labor strike that halts the export of oil and medicine. Which cities are affected by this and why?
+  Answer Key : The cities affected are Veldkeep, Nethholm, Lochfield. They rely on Yorkridge for imported goods: Veldkeep (imports oil from Yorkridge); Nethholm (imports oil from Yorkridge); Lochfield (imports medicine from Yorkridge). The labor strike halting exports of oil and medicine directly disrupts their supply.
+  BASELINE  (judge: 4): The labor strike in Yorkridge affects Veldkeep, as it imports oil and medicine from Yorkridge. Additionally, Yorewood may also be affected indirectly due to its import of oil from Yorkridge.
+  HGRAG     (judge: 5): Yorkridge, Veldkeep, Yorewood, Lochfield, and Oakridge are affected by the labor strike in Yorkridge because they all trade with Yorkridge for oil and medicine.
+
+[Q44 | small] Oakcliff is experiencing a labor strike that halts the export of grain and chemicals. Which cities are affected by this and why?
+  Answer Key : The cities affected are Yorewood. They rely on Oakcliff for imported goods: Yorewood (imports chemicals from Oakcliff). The labor strike halting exports of grain and chemicals directly disrupts their supply.
+  BASELINE  (judge: 5): The labor strike in Oakcliff affects cities that import grain and chemicals from Oakcliff, which include Yorkridge (due to trade relations), Veldkeep (due to trade relations), and Nethholm (due to trade relations). These cities will experience disruptions in their grain and chemical supplies.
+  HGRAG     (judge: 5): Veldkeep and Yorewood are affected by the labor strike in Oakcliff, as they trade with Oakcliff and import grain and chemicals from it.

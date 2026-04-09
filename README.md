@@ -12,7 +12,7 @@ The world is modeled as a three-level hierarchy: **Planets → Countries → Cit
 
 | Architecture | Strategy |
 |---|---|
-| **baseline** | Full world serialized as flat text |
+| **baseline** | Dense vector RAG: one chunk per node, top-10 retrieved by cosine similarity (nomic-embed-text) |
 | **hgrag**    | Hierarchy-aware subgraph: anchor node + k_up=2 ancestors + k_side=1 lateral neighbors |
 
 HG-RAG uses an LLM to extract the anchor entity from each query, walks up the containment hierarchy, and collects relevant lateral neighbors, prioritizing adversarial neighbors (hostile/unfriendly) so they are never dropped by the neighbor cap.
@@ -42,9 +42,10 @@ HG-RAG uses an LLM to extract the anchor entity from each query, walks up the co
 ollama serve
 ```
 
-**2. Pull the Mistral model (one-time):**
+**2. Pull the required models (one-time):**
 ```bash
 ollama pull mistral:latest
+ollama pull nomic-embed-text
 ```
 
 **3. Install Python dependencies:**
@@ -85,9 +86,10 @@ python main.py --size all
 
 | Flag | Default | Description |
 |---|---|---|
-| `--model`  | `mistral:latest` | Ollama model to use |
-| `--seed`   | `42` | Random seed for reproducibility (any int) |
-| `--output` | `results/` | Folder for output files |
+| `--model`       | `mistral:latest`    | Ollama model for generation and entity extraction |
+| `--embed_model` | `nomic-embed-text`  | Ollama model for baseline RAG embeddings |
+| `--seed`        | `42`                | Random seed for reproducibility (any int) |
+| `--output`      | `results/`          | Folder for output files |
 
 ---
 

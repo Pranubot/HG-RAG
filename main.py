@@ -16,7 +16,7 @@ import pandas as pd
 from world_builder import generate_world, world_stats
 from queries import generate_queries
 from evaluate import run_experiment, save_summary, METRICS
-from llm import check_ollama, DEFAULT_MODEL
+from llm import check_ollama, DEFAULT_MODEL, EMBED_MODEL
 
 # main function that parses  arguments and runs the experiment
 def main():
@@ -37,6 +37,11 @@ def main():
         "--model",
         default=DEFAULT_MODEL,
         help=f"Ollama model name (default: {DEFAULT_MODEL})",
+    )
+    parser.add_argument(
+        "--embed_model",
+        default=EMBED_MODEL,
+        help=f"Ollama embedding model for simple RAG index (default: {EMBED_MODEL})",
     )
     parser.add_argument(
         "--seed",
@@ -92,7 +97,7 @@ def main():
 
         # Run experiment
         print("Running experiment (both systems per query)...\n")
-        df = run_experiment(G, queries, model=args.model, verbose=True)
+        df = run_experiment(G, queries, model=args.model, embed_model=args.embed_model, verbose=True)
 
         if df.empty:
             print("No results — check that anchor nodes were resolved.")

@@ -266,3 +266,66 @@ def serialize_flat_world(G, max_chars=None):
     if max_chars and len(text) > max_chars:
         text = text[:max_chars] + "\n...[truncated]"
     return text
+
+
+# Simple vector RAG baseline
+
+def _cosine_similarity(a: list, b: list) -> float:
+    if not a or not b:
+        return 0.0
+    dot   = sum(x * y for x, y in zip(a, b))
+    mag_a = sum(x * x for x in a) ** 0.5
+    mag_b = sum(x * x for x in b) ** 0.5
+    return dot / (mag_a * mag_b) if mag_a and mag_b else 0.0
+
+
+def build_rag_index(G, embed_model="nomic-embed-text"):
+    """
+    Build a dense vector index for simple RAG: one chunk per graph node,
+    containing the node's attributes and its direct relations.
+    Requires an Ollama embedding model (default: nomic-embed-text).
+    Run 'ollama pull nomic-embed-text' once before use
+    Returns a list of (chunk_text, embedding) tuples.
+    """
+    from llm import get_embedding
+
+    index = []
+    for node, attrs in G.nodes(data=True):
+        node_type = attrs.get("type", "entity")
+        lines = [f"[{node_type.upper()}] {node}"]
+        for k, v in attrs.items():
+            if k == "type":
+                continue
+            if isinstance(v, list):
+                v = ", ".join(v) if v else "none"
+            lines.append(f"  {k}: {v}")
+        # Containment parent 
+        for u, _, d in G.in_edges(node, data=True):
+            if d.get("relation") == "contains":
+                lines.append(f"  located in: {u}")
+        # Lateral relations
+        rels = [
+            f"{d.get('relation')} {v}"
+            for _, v, d in G.out_edges(node, data=True)
+            if d.get("relation") != "contains"
+        ]
+        if rels:
+            lines.append(f"  relations: {'; '.join(rels)}")
+        chunk = "\n".join(lines)
+        index.append((chunk, get_embedding(chunk, model=embed_model)))
+    return index
+
+
+def retrieve_rag_chunks(query: str, index: list, embed_model: str = "nomic-embed-text", top_k: int = 10) -> str:
+    """
+    Embed the query and return the top-k most similar chunks as a single context string.
+    top_k=10 is chosen to roughly match the HG-RAG subgraph size for a fair comparison.
+    """
+    from llm import get_embedding
+
+    query_emb = get_embedding(query, model=embed_model)
+    scored = sorted(
+        [(_cosine_similarity(query_emb, emb), chunk) for chunk, emb in index if emb],
+        reverse=True,
+    )
+    return "\n\n".join(chunk for _, chunk in scored[:top_k])

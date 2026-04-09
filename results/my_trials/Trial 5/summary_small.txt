@@ -1,0 +1,92 @@
+============================================================
+OVERALL RESULTS (mean per system)
+============================================================
+          factual_accuracy  hallucination_rate  locality_awareness
+system                                                            
+baseline             1.000               0.026               0.976
+hgrag                1.771               0.013               1.000
+
+============================================================
+RESULTS BY QUERY TYPE
+============================================================
+                       factual_accuracy  hallucination_rate  locality_awareness
+query_type   system                                                            
+hierarchical baseline             0.500               0.000               1.000
+             hgrag                2.000               0.000               1.000
+local_fact   baseline             1.000               0.021               1.000
+             hgrag                2.000               0.042               1.000
+multi_hop    baseline             1.167               0.082               0.903
+             hgrag                1.333               0.010               1.000
+neighborhood baseline             1.333               0.000               1.000
+             hgrag                1.750               0.000               1.000
+
+============================================================
+MULTI-HOP LLM JUDGE SCORE (mean per system, scale 1-5)
+============================================================
+system
+baseline    3.417
+hgrag       3.083
+
+============================================================
+MULTI-HOP QUESTION DETAILS
+============================================================
+
+[Q1 | small] Yoremoor has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Lochridge, Onyxhaven. They supply goods to Yoremoor: Lochridge (exports grain to Yoremoor); Onyxhaven (exports silk to Yoremoor). With Yoremoor halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 3): Cities that would take an economic hit from Yoremoor halting its imports are Onyxwood (due to lack of silk) and potentially Pinecove (if it relies on the import of medicine). However, without specific information about trade relations between Yoremoor and these cities, we cannot confirm if Pinecove will be affected.
+  HGRAG     (judge: 3): Onyxhaven, Onyxwood, Lochridge, and Eastspire would take an economic hit from Yoremoor's decision to halt imports, as they trade with Yoremoor.
+
+[Q2 | small] Veldkeep has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Yorkridge, Veldhaven. They supply goods to Veldkeep: Yorkridge (exports oil to Veldkeep); Veldhaven (exports fuel to Veldkeep). With Veldkeep halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Veldkeep halting its imports are Oakcliff, Nethholm, Umbreholm, and Yorkridge as they all have trade relations with Veldkeep according to the provided context.
+  HGRAG     (judge: 1): Umbreholm, Yorewood, Yorkridge, and Veldhaven would take an economic hit from Veldkeep's decision to halt imports.
+
+[Q13 | small] Yoremoor is experiencing a labor strike that halts the export of technology and fuel. Which cities are affected by this and why?
+  Answer Key : The cities affected are Lochmoor, Lochridge, Onyxhaven, Zealkeep, Eastspire. They rely on Yoremoor for imported goods: Lochmoor (imports fuel from Yoremoor); Lochridge (imports fuel from Yoremoor); Onyxhaven (imports technology from Yoremoor); Zealkeep (imports fuel from Yoremoor); Eastspire (imports fuel from Yoremoor). The labor strike halting exports of technology and fuel directly disrupts their supply.
+  BASELINE  (judge: 4): The cities affected by the labor strike in Yoremoor are Zealkeep, Lochridge, and potentially other cities that trade with them such as Onyxhaven, since Yoremoor exports technology and fuel to these cities. This is because the strike halts the export of these goods from Yoremoor.
+  HGRAG     (judge: 3): The cities affected by the labor strike in Yoremoor are Onyxhaven, Lochridge, Zealkeep, Jadewick, Onyxwood, Eastspire, and Lochmoor. This is because Yoremoor trades technology and fuel with these cities, and the halt in exports from Yoremoor will impact their supplies.
+
+[Q16 | small] Jadewick has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Pinecove, Eastspire. They supply goods to Jadewick: Pinecove (exports textiles, oil to Jadewick); Eastspire (exports oil to Jadewick). With Jadewick halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 5): Pinecove, Onyxwood, and Eastspire would take an economic hit from Jadewick's temporary halt on imports since they trade with it.
+  HGRAG     (judge: 3): Pinecove, Eastspire, and Onyxwood would take an economic hit from Jadewick's decision to halt imports.
+
+[Q20 | small] Lochfield is experiencing a labor strike that halts the export of oil and livestock. Which cities are affected by this and why?
+  Answer Key : The cities affected are Yorewood. They rely on Lochfield for imported goods: Yorewood (imports oil from Lochfield). The labor strike halting exports of oil and livestock directly disrupts their supply.
+  BASELINE  (judge: 3): The cities affected by the labor strike in Lochfield are Yorkridge, Veldhaven, and possibly Yorewood, as all three trade with Lochfield and import oil and/or livestock from it.
+  HGRAG     (judge: 4): Yorkridge and Veldhaven are affected by the labor strike in Lochfield, as they both trade with Lochfield and import oil and/or livestock from it.
+
+[Q32 | small] Venthai has declared war on a neighboring country. Which country may that be and why?
+  Answer Key : The most likely target would be Strevon. Venthai has a hostile relationship with Strevon, making military escalation the expected outcome.
+  BASELINE  (judge: 5): Venthai is hostile towards Strevon, as stated in the context.
+  HGRAG     (judge: 5): The country that Venthai is hostile towards, according to the context, is Strevon. This hostility might be due to geopolitical tensions or conflicts over resources or trade routes.
+
+[Q34 | small] Umbreholm has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Nethholm, Veldkeep. They supply goods to Umbreholm: Nethholm (exports grain to Umbreholm); Veldkeep (exports chemicals to Umbreholm). With Umbreholm halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 3): Nethholm, Veldkeep, and Oakcliff would take an economic hit from Umbreholm's temporary halt on imports as they trade with Umbreholm.
+  HGRAG     (judge: 1): Yorkridge, Oakridge, and Nethholm would take an economic hit from Umbreholm's decision to halt imports, as they trade with Umbreholm.
+
+[Q35 | small] Onyxwood has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Eastspire, Onyxhaven. They supply goods to Onyxwood: Eastspire (exports fish to Onyxwood); Onyxhaven (exports silk to Onyxwood). With Onyxwood halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 1): Cities that would take an economic hit from Onyxwood halting its imports are Yorewood, Umbreholm, Veldhaven, and Oakcliff (as they trade with Onyxwood). Additionally, Yorkridge might also be affected indirectly due to the trade relationship between Yorewood and Yorkridge.
+  HGRAG     (judge: 5): Onyxhaven and Yoremoor would take an economic hit from Onyxwood's decision to halt imports, as both cities trade with Onyxwood.
+
+[Q36 | small] Yorkridge has a surplus of goods and temporarily halts the imports of any goods to save money. Which cities would take an economic hit from this?
+  Answer Key : The cities that would take an economic hit are Veldkeep, Nethholm. They supply goods to Yorkridge: Veldkeep (exports chemicals to Yorkridge); Nethholm (exports grain to Yorkridge). With Yorkridge halting all imports, these trade partners lose a key market.
+  BASELINE  (judge: 3): Nethholm, Oakcliff, Veldkeep, and Umbreholm would take an economic hit from Yorkridge's decision to halt imports.
+  HGRAG     (judge: 1): Umbreholm, Yorewood, Lochfield, and Oakridge would take an economic hit from Yorkridge's decision to halt imports.
+
+[Q41 | small] Yorewood is experiencing a labor strike that halts the export of textiles and machinery. Which cities are affected by this and why?
+  Answer Key : The cities affected are Lochfield, Oakcliff, Oakridge. They rely on Yorewood for imported goods: Lochfield (imports textiles from Yorewood); Oakcliff (imports textiles from Yorewood); Oakridge (imports textiles from Yorewood). The labor strike halting exports of textiles and machinery directly disrupts their supply.
+  BASELINE  (judge: 4): The labor strike in Yorewood affects cities that import textiles or machinery from Yorewood, which include Oakcliff (due to imports of textiles) and Onyxhaven (due to imports of machinery). This is because the strike halts the export of these goods from Yorewood.
+  HGRAG     (judge: 5): The labor strike in Yorewood affects Oakridge and Lochfield, as both cities trade with Yorewood for textiles and machinery.
+
+[Q43 | small] Yorkridge is experiencing a labor strike that halts the export of oil and medicine. Which cities are affected by this and why?
+  Answer Key : The cities affected are Veldkeep, Nethholm, Lochfield. They rely on Yorkridge for imported goods: Veldkeep (imports oil from Yorkridge); Nethholm (imports oil from Yorkridge); Lochfield (imports medicine from Yorkridge). The labor strike halting exports of oil and medicine directly disrupts their supply.
+  BASELINE  (judge: 4): The labor strike in Yorkridge affects Veldkeep, as it imports oil and medicine from Yorkridge. Additionally, Yorewood may also be affected indirectly due to its import of oil from Yorkridge.
+  HGRAG     (judge: 3): The labor strike in Yorkridge affects Umbreholm, Yorewood, Lochfield, and Oakridge because they all trade with Yorkridge. However, only Yorkridge exports oil and medicine to these cities.
+
+[Q44 | small] Oakcliff is experiencing a labor strike that halts the export of grain and chemicals. Which cities are affected by this and why?
+  Answer Key : The cities affected are Yorewood. They rely on Oakcliff for imported goods: Yorewood (imports chemicals from Oakcliff). The labor strike halting exports of grain and chemicals directly disrupts their supply.
+  BASELINE  (judge: 5): The labor strike in Oakcliff affects cities that import grain and chemicals from it, which include Yorkridge (due to trade relations), Veldkeep (due to trade relations), and Nethholm (due to trade relations). These cities will experience a halt in the supply of grain and chemicals.
+  HGRAG     (judge: 3): Yorewood and Veldkeep are affected by the labor strike in Oakcliff, as they import both grain and chemicals from Oakcliff.
